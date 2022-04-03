@@ -1,16 +1,16 @@
 package ua.edu.sumdu.j2se.Kharchenko.tasks;
 
 public class Task {
-    private static String title;
-    private static int time;
-    private static int start;
-    private static int end;
-    private static int interval;
-    private static boolean active;
-    private static boolean repeated;
+    private String title;
+    private int time;
+    private int start;
+    private int end;
+    private int interval;
+    private boolean active;
+    private boolean repeated;
 
     public Task(String title, int time) {
-        Task.title = title;
+        this.title = title;
         this.setTime(time);
         active = false;
     }
@@ -19,7 +19,7 @@ public class Task {
     }
 
     public Task(String title, int start, int end, int interval) {
-        Task.title = title;
+        this.title = title;
         this.setTime(start, end, interval);
         active = false;
     }
@@ -29,7 +29,7 @@ public class Task {
     }
 
     public void setTitle(String title) {
-        Task.title = title;
+        this.title = title;
     }
 
     public boolean isActive() {
@@ -37,7 +37,7 @@ public class Task {
     }
 
     public void setActive(boolean active) {
-        Task.active = active;
+        this.active = active;
     }
 
     public boolean isRepeated() {
@@ -72,18 +72,18 @@ public class Task {
 
     public void setTime(int start, int end, int interval) {
         if (start < 0) {
-            Task.start = 0;
-            Task.end = 0;
-            Task.interval = 0;
+            this.start = 0;
+            this.end = 0;
+            this.interval = 0;
         } else if (end >= 0 && interval >= 0) {
-            Task.start = start;
-            Task.end = end;
-            Task.interval = interval;
+            this.start = start;
+            this.end = end;
+            this.interval = interval;
             repeated = true;
         } else {
-            Task.start = start;
-            Task.end = start;
-            Task.interval = 0;
+            this.start = start;
+            this.end = start;
+            this.interval = 0;
         }
 
     }
