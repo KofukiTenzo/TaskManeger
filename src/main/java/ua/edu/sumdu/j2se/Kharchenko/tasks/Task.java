@@ -1,6 +1,7 @@
 package ua.edu.sumdu.j2se.Kharchenko.tasks;
 
 public class Task {
+    String i = "hello";
     private String title;
     private int time;
     private int start;
