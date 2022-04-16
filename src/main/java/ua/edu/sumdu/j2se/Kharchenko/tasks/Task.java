@@ -1,27 +1,30 @@
 package ua.edu.sumdu.j2se.Kharchenko.tasks;
 
 public class Task {
-    private String title;
-    private int time;
-    private int start;
-    private int end;
-    private int interval;
+    public String title;
+    protected int time, start, end, interval;
     private boolean active;
     private boolean repeated;
 
     public Task(String title, int time) {
-        this.title = title;
-        this.setTime(time);
-        active = false;
+        if (time < 0)
+            throw new IllegalArgumentException("Время введено некорректно!");
+
+        setTitle(title);
+        setTime(time);
+        setActive(false);
     }
 
     public Task() {
     }
 
     public Task(String title, int start, int end, int interval) {
-        this.title = title;
-        this.setTime(start, end, interval);
-        active = false;
+        if (start < 0 || end < 0 || interval < 0)
+            throw new IllegalArgumentException("Время введено не корректно!");
+
+        setTitle(title);
+        setTime(start, end, interval);
+        setActive(false);
     }
 
     public String getTitle() {
