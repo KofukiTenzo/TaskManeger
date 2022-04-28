@@ -1,18 +1,29 @@
 package ua.edu.sumdu.j2se.kharchenko.tasks;
 
-public abstract class AbstractTaskList {
+public abstract class AbstractTaskList implements Iterable<Task>{
     public abstract void add(Task task);
-    public abstract boolean remove(Task task);
-    public abstract Task getTask(int index);
-    public abstract int size();
-    public AbstractTaskList incoming(int from, int to) {
 
+    public abstract boolean remove(Task task);
+
+    public abstract Task getTask(int index);
+
+    public abstract int size();
+
+    public abstract int hashCode();
+
+    public abstract boolean equals(Object obj);
+
+    public abstract String toString();
+
+    public AbstractTaskList incoming(int from, int to) {
         AbstractTaskList list;
-        if (this.getClass().toString().equals("ArrayTaskList")) {
+
+        if (this.getClass().getSimpleName().equals("ArrayTaskList")) {
             list = new ArrayTaskList();
         } else {
             list = new LinkedTaskList();
         }
+
         for (int i = 0; i < size();i++) {
             Task task = getTask(i);
             if (task.isActive()) {
@@ -21,6 +32,7 @@ public abstract class AbstractTaskList {
                 }
             }
         }
+
         return list;
     }
 }

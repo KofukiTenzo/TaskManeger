@@ -1,8 +1,10 @@
-package ua.edu.sumdu.j2se.Kharchenko.tasks;
+package ua.edu.sumdu.j2se.kharchenko.tasks;
 
-public class Task {
-    public String title;
-    protected int time, start, end, interval;
+import java.util.Objects;
+
+public class Task implements Cloneable {
+    private String title;
+    private int time, start, end, interval;
     private boolean active;
     private boolean repeated;
 
@@ -120,6 +122,36 @@ public class Task {
             }
         } else {
             return -1;
+        }
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Task)) return false;
+        Task task = (Task) o;
+        return time == task.time && start == task.start && end == task.end && interval == task.interval && repeated == task.repeated && active == task.active && title.equals(task.title);
+    }
+
+    public int hashCode() {
+        return Objects.hash(title, time, start, end, interval, repeated, active);
+    }
+
+    public String toString() {
+        return "Task:" +
+                "\n  title\'" + title + '\'' +
+                "\n  time: " + time +
+                "\n  start: " + start +
+                "\n  end: " + end +
+                "\n  interval: " + interval +
+                "\n  repeated: " + repeated +
+                "\n  active: " + active;
+    }
+
+    public Task clone() {
+        try {
+            return (Task) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
         }
     }
 }
