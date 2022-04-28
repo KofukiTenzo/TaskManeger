@@ -1,6 +1,6 @@
-package ua.edu.sumdu.j2se.Kharchenko.tasks;
+package ua.edu.sumdu.j2se.kharchenko.tasks;
 
-public class ArrayTaskList {
+public class ArrayTaskList extends AbstractTaskList{
     private int size;
     private int capacity;
     private Task[] elements;
@@ -77,16 +77,5 @@ public class ArrayTaskList {
             }
             return null;
         }else return elements[index];
-    }
-
-    public ArrayTaskList incoming(int from, int to) {
-        ArrayTaskList incoming = new ArrayTaskList();
-        for (int i = 0; i < size(); i++) {
-            if (getTask(i).nextTimeAfter(from) >= 0) {
-                if (getTask(i).nextTimeAfter(from) <= to)
-                    incoming.add(getTask(i));
-            }
-        }
-        return incoming;
     }
 }

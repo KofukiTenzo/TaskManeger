@@ -1,7 +1,6 @@
-package ua.edu.sumdu.j2se.Kharchenko.tasks;
+package ua.edu.sumdu.j2se.kharchenko.tasks;
 
-public class LinkedTaskList {
-    private Task task;
+public class LinkedTaskList extends AbstractTaskList{
     private Node<Task> head;
     private Node<Task> tail;
     private int size = 0;
@@ -28,9 +27,7 @@ public class LinkedTaskList {
         else
             l.next = newNode;
         size++;
-
     }
-
 
     public boolean remove(Task task){
         if (task == null) {
@@ -51,7 +48,7 @@ public class LinkedTaskList {
         return false;
     }
 
-    void unlink(Node<Task> x) {
+    Task unlink(Node<Task> x) {
 
         final Task element = x.value;
         final Node<Task> next = x.next;
@@ -73,6 +70,7 @@ public class LinkedTaskList {
 
         x.value = null;
         size--;
+        return element;
     }
 
     public Task getTask(int index){
@@ -98,17 +96,5 @@ public class LinkedTaskList {
 
     public int size(){
         return size;
-    }
-
-
-    public LinkedTaskList incoming(int from, int to) {
-        if (to < 0)
-            throw new IllegalArgumentException("Time must be greater than 0");
-        LinkedTaskList incomingTasks = new LinkedTaskList();
-        for (int i = 0; i < size; i++) {
-            if (getTask(i).nextTimeAfter(from) != -1 && getTask(i).nextTimeAfter(from) <= to)
-                incomingTasks.add(getTask(i));
-        }
-        return incomingTasks;
     }
 }
