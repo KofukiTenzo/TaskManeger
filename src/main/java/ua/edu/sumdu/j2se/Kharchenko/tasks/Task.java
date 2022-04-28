@@ -1,27 +1,32 @@
-package ua.edu.sumdu.j2se.Kharchenko.tasks;
+package ua.edu.sumdu.j2se.kharchenko.tasks;
 
-public class Task {
+import java.util.Objects;
+
+public class Task implements Cloneable {
     private String title;
-    private int time;
-    private int start;
-    private int end;
-    private int interval;
+    private int time, start, end, interval;
     private boolean active;
     private boolean repeated;
 
     public Task(String title, int time) {
-        this.title = title;
-        this.setTime(time);
-        active = false;
+        if (time < 0)
+            throw new IllegalArgumentException("Время введено некорректно!");
+
+        setTitle(title);
+        setTime(time);
+        setActive(false);
     }
 
     public Task() {
     }
 
     public Task(String title, int start, int end, int interval) {
-        this.title = title;
-        this.setTime(start, end, interval);
-        active = false;
+        if (start < 0 || end < 0 || interval < 0)
+            throw new IllegalArgumentException("Время введено не корректно!");
+
+        setTitle(title);
+        setTime(start, end, interval);
+        setActive(false);
     }
 
     public String getTitle() {
@@ -117,6 +122,36 @@ public class Task {
             }
         } else {
             return -1;
+        }
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Task)) return false;
+        Task task = (Task) o;
+        return time == task.time && start == task.start && end == task.end && interval == task.interval && repeated == task.repeated && active == task.active && title.equals(task.title);
+    }
+
+    public int hashCode() {
+        return Objects.hash(title, time, start, end, interval, repeated, active);
+    }
+
+    public String toString() {
+        return "Task:" +
+                "\n  title\'" + title + '\'' +
+                "\n  time: " + time +
+                "\n  start: " + start +
+                "\n  end: " + end +
+                "\n  interval: " + interval +
+                "\n  repeated: " + repeated +
+                "\n  active: " + active;
+    }
+
+    public Task clone() {
+        try {
+            return (Task) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
         }
     }
 }
