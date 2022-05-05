@@ -2,7 +2,7 @@ package ua.edu.sumdu.j2se.kharchenko.tasks;
 
 import java.util.*;
 
-public class ArrayTaskList extends AbstractTaskList implements Cloneable {
+public class ArrayTaskList extends AbstractTaskList {
     private int size;
 
     private int capacity;
@@ -15,6 +15,7 @@ public class ArrayTaskList extends AbstractTaskList implements Cloneable {
         elements = new Task[capacity];
     }
 
+    @Override
     public void add(Task task) {
         if (task == null) {
             try {
@@ -42,6 +43,7 @@ public class ArrayTaskList extends AbstractTaskList implements Cloneable {
         elements = newElements;
     }
 
+    @Override
     public boolean remove(Task task) {
         if (task == null) {
             try {
@@ -68,10 +70,12 @@ public class ArrayTaskList extends AbstractTaskList implements Cloneable {
         }
     }
 
+    @Override
     public int size() {
         return size;
     }
 
+    @Override
     public Task getTask(int index) {
         if (index < 0 || index >= this.size) {
             try {
@@ -114,6 +118,7 @@ public class ArrayTaskList extends AbstractTaskList implements Cloneable {
         return size == that.size && Arrays.equals(elements, that.elements);
     }
 
+    @Override
     public Object clone() {
         try {
             ArrayTaskList result = (ArrayTaskList) super.clone();
@@ -124,15 +129,18 @@ public class ArrayTaskList extends AbstractTaskList implements Cloneable {
         }
     }
 
+    @Override
     public Iterator<Task> iterator() {
         return new Iterator<>() {
             int current;
             int prevElem = -1;
 
+            @Override
             public boolean hasNext() {
                 return current != size;
             }
 
+            @Override
             public Task next() {
                 try {
                     int i = current;
@@ -145,6 +153,7 @@ public class ArrayTaskList extends AbstractTaskList implements Cloneable {
                 }
             }
 
+            @Override
             public void remove() {
                 if (prevElem < 0)
                     throw new IllegalStateException();
@@ -160,5 +169,10 @@ public class ArrayTaskList extends AbstractTaskList implements Cloneable {
             }
 
         };
+    }
+
+    @Override
+    public ListTypes.types getType(){
+        return ListTypes.types.ARRAY;
     }
 }

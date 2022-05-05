@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-public class LinkedTaskList extends AbstractTaskList implements Cloneable {
+public class LinkedTaskList extends AbstractTaskList {
     private Node<Task> head;
     private Node<Task> tail;
     private int size;
@@ -23,6 +23,7 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
         }
     }
 
+    @Override
     public void add(Task task) {
         final Node<Task> l = tail;
         final Node<Task> newNode = new Node<>(l, task, null);
@@ -34,6 +35,7 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
         size++;
     }
 
+    @Override
     public boolean remove(Task task) {
         if (task == null) {
             for (Node<Task> x = head; x != null; x = x.next) {
@@ -78,6 +80,7 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
         return element;
     }
 
+    @Override
     public Task getTask(int index) {
         if (!rangeCheck(index))
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
@@ -99,6 +102,7 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
         return index >= 0 && index < size;
     }
 
+    @Override
     public int size() {
         return size;
     }
@@ -158,15 +162,18 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
         return hashCode;
     }
 
+    @Override
     public Iterator<Task> iterator() {
         return new Iterator<>() {
             int current;
             int prevElem = -1;
 
+            @Override
             public boolean hasNext() {
                 return current != size;
             }
 
+            @Override
             public Task next() {
                 try {
                     int i = current;
@@ -179,6 +186,7 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
                 }
             }
 
+            @Override
             public void remove() {
                 if (prevElem < 0)
                     throw new IllegalStateException();
@@ -196,6 +204,7 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
         };
     }
 
+    @Override
     public Object clone() {
         LinkedTaskList clone = superClone();
 
@@ -214,5 +223,10 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);
         }
+    }
+
+    @Override
+    public ListTypes.types getType(){
+        return ListTypes.types.LINKED;
     }
 }

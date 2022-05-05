@@ -1,6 +1,8 @@
 package ua.edu.sumdu.j2se.kharchenko.tasks;
 
-public abstract class AbstractTaskList implements Iterable<Task>{
+import static ua.edu.sumdu.j2se.kharchenko.tasks.TaskListFactory.createTaskList;
+
+public abstract class AbstractTaskList implements Iterable<Task>, Cloneable{
     public abstract void add(Task task);
 
     public abstract boolean remove(Task task);
@@ -15,14 +17,10 @@ public abstract class AbstractTaskList implements Iterable<Task>{
 
     public abstract String toString();
 
-    public AbstractTaskList incoming(int from, int to) {
-        AbstractTaskList list;
+    public abstract ListTypes.types getType();
 
-        if (this.getClass().getSimpleName().equals("ArrayTaskList")) {
-            list = new ArrayTaskList();
-        } else {
-            list = new LinkedTaskList();
-        }
+    public final AbstractTaskList incoming(int from, int to) {
+        AbstractTaskList list = createTaskList(getType());
 
         for (int i = 0; i < size();i++) {
             Task task = getTask(i);
