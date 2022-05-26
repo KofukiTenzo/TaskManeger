@@ -1,4 +1,4 @@
-package ua.edu.sumdu.j2se.Kharchenko.tasks;
+package ua.edu.sumdu.j2se.kharchenko.tasks;
 
 public class Main {
 

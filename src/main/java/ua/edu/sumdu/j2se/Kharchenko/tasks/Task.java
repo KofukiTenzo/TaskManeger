@@ -1,27 +1,38 @@
-package ua.edu.sumdu.j2se.Kharchenko.tasks;
+package ua.edu.sumdu.j2se.kharchenko.tasks;
 
-public class Task {
+import java.time.LocalDateTime;
+import java.util.Objects;
+
+public class Task implements Cloneable {
     private String title;
-    private int time;
-    private int start;
-    private int end;
+    private LocalDateTime time;
+    private LocalDateTime start;
+    private LocalDateTime end;
     private int interval;
     private boolean active;
     private boolean repeated;
 
-    public Task(String title, int time) {
+    public Task(String title, LocalDateTime time) {
+        if (title == null || time == null)
+            throw new IllegalArgumentException("Время введено некорректно!");
+
         this.title = title;
-        this.setTime(time);
-        active = false;
+        this.time = time;
+        this.repeated = false;
     }
 
     public Task() {
     }
 
-    public Task(String title, int start, int end, int interval) {
+    public Task(String title, LocalDateTime start, LocalDateTime end, int interval) {
+        if (start == null || end == null || interval < 0 || title == null)
+            throw new IllegalArgumentException("Время введено не корректно!");
+
         this.title = title;
-        this.setTime(start, end, interval);
-        active = false;
+        this.start = start;
+        this.end = end;
+        this.interval = interval;
+        this.repeated = true;
     }
 
     public String getTitle() {
@@ -29,6 +40,7 @@ public class Task {
     }
 
     public void setTitle(String title) {
+        if (title == null) throw new IllegalArgumentException();
         this.title = title;
     }
 
@@ -44,79 +56,113 @@ public class Task {
         return interval > 0;
     }
 
-    public int getTime() {
-        return start;
-    }
-
-    public void setTime(int time) {
-        repeated = false;
-        this.setTime(time, time, 0);
-    }
-
-    public int getStartTime() {
-        return start;
-    }
-
-    public int getEndTime() {
-        if (end < 0) {
-            end = 0;
-            return 0;
+    public LocalDateTime getTime() {
+        if (repeated) {
+            return start;
         } else {
+            return time;
+        }
+    }
+
+    public void setTime(LocalDateTime time) {
+        if (time == null) {
+            throw new IllegalArgumentException();
+        }
+        this.time = time;
+        this.repeated = false;
+    }
+
+    public LocalDateTime getStartTime() {
+        if (repeated) {
+            return start;
+        } else {
+            return time;
+        }
+    }
+
+    public LocalDateTime getEndTime() {
+        if (repeated) {
             return end;
+        } else {
+            return time;
         }
     }
 
     public int getRepeatInterval() {
-        return (end >= 0 || end >= start) && repeated && interval > 0 ? interval : 0;
-    }
-
-    public void setTime(int start, int end, int interval) {
-        if (start < 0) {
-            this.start = 0;
-            this.end = 0;
-            this.interval = 0;
-        } else if (end >= 0 && interval >= 0) {
-            this.start = start;
-            this.end = end;
-            this.interval = interval;
-            repeated = true;
+        if (repeated) {
+            return interval;
         } else {
-            this.start = start;
-            this.end = start;
-            this.interval = 0;
+            return 0;
         }
-
     }
 
-    public int nextTimeAfter(int current) {
-        if (this.isActive() && current < end && current <= end - interval) {
-            if (current < this.getTime()) {
-                return this.getTime();
-            } else if ((current < start + interval || current == start) && this.isRepeated()) {
-                return start + interval;
-            } else if (current > end - interval && current < end && this.isRepeated()) {
-                return end;
+    public void setTime(LocalDateTime start, LocalDateTime end, int interval) {
+        if (start == null || end == null || interval < 0) {
+            throw new IllegalArgumentException();
+        }
+        this.start = start;
+        this.end = end;
+        this.interval = interval;
+        this.repeated = true;
+    }
+
+    public LocalDateTime nextTimeAfter(LocalDateTime current) {
+        if (active) {
+            if (repeated) {
+                if (current.isBefore(start)) {
+                    return start;
+                } else {
+                    LocalDateTime temp;
+                    temp = start;
+                    while (current.isAfter(temp) || current.isEqual(temp)) {
+                        temp = temp.plusSeconds(interval);
+                    }
+                    if (temp.isBefore(end) || temp.isEqual(end)) {
+                        return temp;
+                    } else {
+                        return null;
+                    }
+                }
             } else {
-                int num1 = (end - start) / interval;
-
-                int i;
-                for (int num2 = 1; num2 < num1; ++num2) {
-                    i = start + interval * num2;
-                    if (current == i) {
-                        return i + interval;
-                    }
+                if (current.isBefore(time)) {
+                    return time;
+                } else {
+                    return null;
                 }
-
-                for (i = start; i < end; i += interval) {
-                    if (current >= i && current < i + interval && current < end && i + interval <= end || current < end - interval && current > end - interval * 2) {
-                        return i + interval;
-                    }
-                }
-
-                return -1;
             }
         } else {
-            return -1;
+            return null;
+        }
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Task)) return false;
+        Task task = (Task) o;
+        return time == task.time && start == task.start && end == task.end && interval == task.interval
+                && repeated == task.repeated && active == task.active && title.equals(task.title);
+    }
+
+    public int hashCode() {
+        return Objects.hash(title, time, start, end, interval, repeated, active);
+    }
+
+    public String toString() {
+        return "Task:" +
+                "\n  title\'" + title + '\'' +
+                "\n  time: " + time +
+                "\n  start: " + start +
+                "\n  end: " + end +
+                "\n  interval: " + interval +
+                "\n  repeated: " + repeated +
+                "\n  active: " + active;
+    }
+
+    public Task clone() {
+        try {
+            return (Task) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
         }
     }
 }
