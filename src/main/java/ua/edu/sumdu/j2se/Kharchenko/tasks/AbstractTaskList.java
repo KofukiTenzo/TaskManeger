@@ -1,6 +1,7 @@
 package ua.edu.sumdu.j2se.kharchenko.tasks;
 
-import static ua.edu.sumdu.j2se.kharchenko.tasks.TaskListFactory.createTaskList;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 public abstract class AbstractTaskList implements Iterable<Task>, Cloneable{
     public abstract void add(Task task);
@@ -19,18 +20,11 @@ public abstract class AbstractTaskList implements Iterable<Task>, Cloneable{
 
     public abstract ListTypes.types getType();
 
-    public final AbstractTaskList incoming(int from, int to) {
-        AbstractTaskList list = createTaskList(getType());
-
-        for (int i = 0; i < size();i++) {
-            Task task = getTask(i);
-            if (task.isActive()) {
-                if (task.getStartTime() > from && task.getEndTime() <= to) {
-                    list.add(task);
-                }
-            }
+    public Stream<Task> getStream() {
+        Task[] elements = new Task[size()];
+        for (int i = 0;i < size();i++) {
+            elements[i] = getTask(i);
         }
-
-        return list;
+        return Arrays.stream(elements);
     }
 }
